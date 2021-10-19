@@ -21,9 +21,8 @@ do
         print $ typeOf prxy
     pure []
 
-libMain :: IO ()
+libMain :: IO [String]
 libMain = do
-    _ <- forInstances $$(discoverInstances @Cls) $ \prxy -> do
+    forInstances $$(discoverInstances @Cls) $ \prxy -> do
         print $ typeOf prxy
-
-    pure ()
+        pure (show (typeOf prxy))

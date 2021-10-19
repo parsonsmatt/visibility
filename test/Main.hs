@@ -25,9 +25,14 @@ do
 main :: IO ()
 main = do
     putStrLn " ~ * ~ * ~ instances discovered in main ~ * ~ * ~"
-    _ <- forInstances $$(discoverInstances @Cls) $ \prxy -> do
+    mainStrs <- forInstances $$(discoverInstances @Cls) $ \prxy -> do
         print $ typeOf prxy
+        pure $ show $ typeOf prxy
 
     putStrLn " ~ * ~ * ~ instances discovered in lib ~ * ~ * ~"
 
-    libMain
+    libStrs <- libMain
+
+    if mainStrs /= libStrs
+        then error "test failed as instances differ"
+        else pure ()
